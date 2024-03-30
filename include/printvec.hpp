@@ -21,6 +21,12 @@ namespace printvec
         {arg.end()};
     } && !IsString<T>;
 
+    template <typename T>
+    concept IsOtherPrintable = requires(T arg)
+    {
+        {std::cout << arg};
+    } && !IsString<T> && !IsSingular<T>;
+
     template <IsSingular T>
     void printThing(const T& arg)
     {
@@ -31,6 +37,12 @@ namespace printvec
     void printThing(const S& arg)
     {
         std::cout << '(' << singular_name<S> << ") \"" << arg << '\"';
+    }
+
+    template <IsOtherPrintable O>
+    void printThing(const O& other)
+    {
+        std::cout << other;
     }
 
     template <IsIterableCont C>
